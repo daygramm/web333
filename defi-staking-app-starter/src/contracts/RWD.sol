@@ -1,8 +1,8 @@
 pragma solidity ^0.5.4;
 
-contract Tether {
-    string public name = "Mock Tether Token";
-    string public symbol = "mUSDT";
+contract RWD {
+    string public name = "Reward Token";
+    string public symbol = "RWD";
     uint256 public totalSupply = 1000000000000000000000000; // 1百万
     uint8 public decimals = 18;
 
@@ -22,7 +22,7 @@ contract Tether {
     mapping(address => uint256) public balanceOf;
     mapping(address => mapping(address => uint256)) public allowance;
 
-    constructor() public{
+    constructor() public {
         balanceOf[msg.sender] = totalSupply;
     }
 
