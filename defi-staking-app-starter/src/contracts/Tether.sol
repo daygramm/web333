@@ -18,10 +18,10 @@ contract Tether {
         uint _value
     );
 
-    error insufficientBalance(
-        uint requested,
-        uint avaliable
-    );
+    //    error insufficientBalance(
+    //        uint requested,
+    //        uint avaliable
+    //    );
 
     mapping(address => uint256) public balanceOf;
 
@@ -30,13 +30,14 @@ contract Tether {
     }
 
     function transfer(address to, uint value) public returns (bool success) {
-        if(value > balanceOf[msg.sender]){
-            revert insufficientBalance(value,balanceOf[msg.sender]);
-            return false;
-        }
+        //        if (value > balanceOf[msg.sender]) {
+        //            revert insufficientBalance(value, balanceOf[msg.sender]);
+        //            return false;
+        //        }
+        require(balanceOf[msg.sender] >= value);
         balanceOf[msg.sender] -= value;
         balanceOf[to] += value;
-        emit Transfer(msg.sender,to,value);
+        emit Transfer(msg.sender, to, value);
         return true;
     }
 }
