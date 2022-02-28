@@ -33,4 +33,16 @@ contract DecentralBank {
         isStaking[msg.sender] = true;
         hasStaked[msg.sender] = true;
     }
+
+    function issueToken() public {
+        require(msg.sender == owner, "caller must be the owner");
+
+        for (uint i = 0; i < stakers.length; i++) {
+            address recipient = stakers[i];
+            uint balance = stakingBalance[recipient];
+            if (balance > 0) {
+                rwd.transfer(recipient, balance);
+            }
+        }
+    }
 }
