@@ -9,7 +9,7 @@ require("chai")
   .use(require("chai-as-promised"))
   .should();
 
-contract("DecentralBank", ([accounts]) => {
+contract("DecentralBank", ([owner, customer]) => {
   let tether;
   let reward;
   let decentralBank;
@@ -23,8 +23,8 @@ contract("DecentralBank", ([accounts]) => {
     reward = await RWD.new();
     decentralBank = await DecentralBank.new(reward.address, tether.address);
 
-    await reward.transfer(decentralBank.address,tokens("1000000"));
-    await tether.transfer(accounts[1],tokens("100"),{from:accounts[0]});
+    await reward.transfer(decentralBank.address, tokens("1000000"));
+    await tether.transfer(customer, tokens("100"), { from: owner });
   });
 
   describe("Mock Tether Deployment", async () => {
