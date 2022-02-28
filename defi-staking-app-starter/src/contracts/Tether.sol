@@ -38,11 +38,7 @@ contract Tether {
         return true;
     }
 
-    function transferFrom(
-        address from,
-        address to,
-        uint256 value
-    ) public returns (bool success) {
+    function transferFrom(address from, address to, uint256 value) public returns (bool success) {
         require(value <= balanceOf[from]);
         require(value <= allowance[from][msg.sender]);
 
@@ -53,10 +49,7 @@ contract Tether {
         return true;
     }
 
-    function approve(address spender, uint256 value)
-    public
-    returns (bool success)
-    {
+    function approve(address spender, uint256 value) public returns (bool success) {
         allowance[msg.sender][spender] = value;
         emit Approval(msg.sender, spender, value);
         return true;
