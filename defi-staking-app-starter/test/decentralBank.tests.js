@@ -57,16 +57,24 @@ contract("DecentralBank", ([owner, customer]) => {
         it('rewards tokens for staking', async () => {
             let result;
             result = await tether.balanceOf(customer);
-            assert.equal(result.toString(), tokens("100"), "customer wallet balance before staking");
+            assert.equal(result.toString(), tokens("100"), "stake之前投资者账户的余额为100");
 
+            // staking 代币
             await tether.approve(decentralBank.address, tokens("100"), {from: customer});
             await decentralBank.depositTokens(tokens("100"), {from: customer});
+
+            result = await tether.balanceOf(customer)
+            assert.equal(result.toString(), tokens("0"), "投资者转完帐后余额为0");
 
             result = await tether.balanceOf(decentralBank.address);
             assert.equal(result.toString(), tokens("100"), "合约余额转入100个Tether");
 
             result = await decentralBank.isStaking(customer);
             assert.equal(result.toString(), "true", "合约当前用户的存入状态应为true");
+
+            // 发行奖励代币
+            await decentralBank.issueToken({from: owner});
+            await decentralBank.issueToken({from: customer}).should.be.rejected;
 
         });
     })
