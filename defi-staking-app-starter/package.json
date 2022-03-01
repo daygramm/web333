@@ -4,6 +4,7 @@
   "description": "DeFi Token Staking App",
   "author": "c-money",
   "dependencies": {
+    "@truffle/contract": "^4.4.10",
     "@types/jest": "^26.0.24",
     "@types/node": "^16.3.1",
     "@types/react": "^17.0.14",
