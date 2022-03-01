@@ -76,6 +76,16 @@ contract("DecentralBank", ([owner, customer]) => {
             await decentralBank.issueToken({from: owner});
             await decentralBank.issueToken({from: customer}).should.be.rejected;
 
+            await decentralBank.unstakeTokens({from: customer});
+
+            result = await tether.balanceOf(customer)
+            assert.equal(result.toString(), tokens("100"), "取款后余额为100");
+
+            result = await tether.balanceOf(decentralBank.address);
+            assert.equal(result.toString(), tokens("0"), "合约余额转出100个Tether");
+
+            result = await decentralBank.isStaking(customer);
+            assert.equal(result.toString(), "false", "合约当前用户的存入状态应为false");
         });
     })
 });

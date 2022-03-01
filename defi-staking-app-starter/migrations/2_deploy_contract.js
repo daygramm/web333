@@ -1,6 +1,6 @@
-const Tether = global.artifacts.require("Tether");
-const RWD = global.artifacts.require("RWD");
-const DecentralBank = global.artifacts.require("DecentralBank");
+const Tether = artifacts.require("Tether");
+const RWD = artifacts.require("RWD");
+const DecentralBank = artifacts.require("DecentralBank");
 
 module.exports = async function (deployer, network, accounts) {
     // 部署Tether代币
