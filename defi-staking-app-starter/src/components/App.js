@@ -7,7 +7,14 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            account: "0x0123456"
+            account: "0x0",
+            tetherBalance: "0",
+            rewardBalance: "0",
+            stakingBalance: "0",
+            tether: {},
+            reward: {},
+            decentralBank: {},
+            loading: true
         }
     }
 
@@ -36,6 +43,7 @@ class App extends Component {
     async loadWeb3Data() {
         const Web3 = window.web3;
         const account = await Web3.eth.getAccounts();
+        this.setState({account: account});
         console.log(account);
     }
 
