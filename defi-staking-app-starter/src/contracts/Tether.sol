@@ -26,6 +26,7 @@ contract Tether {
         balanceOf[msg.sender] = totalSupply;
     }
 
+    // 发送者必须是自己
     function transfer(address to, uint256 value) public returns (bool success) {
         //        if (value > balanceOf[msg.sender]) {
         //            revert insufficientBalance(value, balanceOf[msg.sender]);
@@ -38,6 +39,7 @@ contract Tether {
         return true;
     }
 
+    // 发送者是别人 但是调用者要经过发送者授权
     function transferFrom(address from, address to, uint256 value) public returns (bool success) {
         require(value <= balanceOf[from]);
         require(value <= allowance[from][msg.sender]);
