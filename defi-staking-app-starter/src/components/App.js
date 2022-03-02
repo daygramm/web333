@@ -3,6 +3,8 @@ import "./App.css";
 import Navbar from "./Navbar"
 import Web3 from "web3";
 import Tether from "../truffle_abis/Tether.json";
+import RWD from "../truffle_abis/RWD.json";
+import DecentralBank from "../truffle_abis/DecentralBank.json";
 
 class App extends Component {
     constructor(props) {
@@ -10,9 +12,9 @@ class App extends Component {
         this.state = {
             account: "0x0",
             tetherBalance: "0",
-            rewardBalance: "0",
+            rwdBalance: "0",
             stakingBalance: "0",
-            tether: {},
+            rwd: {},
             reward: {},
             decentralBank: {},
             loading: true
@@ -24,7 +26,7 @@ class App extends Component {
             <div>
                 <Navbar account={this.state.account}/>
                 <div className='text-center' style={{color: 'deepskyblue'}}>
-                    {/*<h className="content">Hello World!</h>*/}
+                    <h1 className="content">{this.state.loading ? "loading" : "loaded"}</h1>
                 </div>
             </div>
         );
@@ -48,6 +50,7 @@ class App extends Component {
         this.setState({account: account[0]});
 
         const networkId = await web3.eth.net.getId();
+
         const tetherData = Tether.networks[networkId];
         if (tetherData) {
             const tether = new web3.eth.Contract(Tether.abi, tetherData.address);
@@ -58,9 +61,33 @@ class App extends Component {
             alert("Error! Tether contract not deployed - no detected network!");
         }
 
+        const rwdData = RWD.networks[networkId];
+        if (rwdData) {
+            const rwd = new web3.eth.Contract(RWD.abi, rwdData.address);
+            this.setState({rwd: rwd});
+            let rwdBalance = await rwd.methods.balanceOf(account[0]).call();
+            this.setState({rwdBalance: rwdBalance.toString()});
+        } else {
+            alert("Error! RWD contract not deployed - no detected network!");
+        }
+
+        const decentralBankData = DecentralBank.networks[networkId];
+        if (decentralBankData) {
+            const decentralBank = new web3.eth.Contract(DecentralBank.abi, decentralBankData.address);
+            this.setState({decentralBank: decentralBank});
+            let stakingBalance = await decentralBank.methods.stakingBalance(account[0]).call();
+            this.setState({stakingBalance: stakingBalance.toString()});
+        } else {
+            alert("Error! Decentral Bank contract not deployed - no detected network!");
+        }
+
         console.log(account);
         console.log(networkId);
         console.log(this.state.tetherBalance);
+        console.log(this.state.rwdBalance);
+        console.log(this.state.stakingBalance);
+
+        this.setState({loading: false});
     }
 
     async UNSAFE_componentWillMount() {
