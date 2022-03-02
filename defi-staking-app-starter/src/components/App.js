@@ -29,9 +29,9 @@ class App extends Component {
                 ? content = <p id='loader' className='text-center' style={{margin: '30px'}}>LOADING PLEASE...</p>
                 : content =
                     <Main
-                        tetherBalance: {this.state.tetherBalance}
-                        rwdBalance: {this.state.rwdBalance}
-                        stakingBalance: {this.state.stakingBalance}
+                        tetherBalance={this.state.tetherBalance}
+                        rwdBalance={this.state.rwdBalance}
+                        stakingBalance={this.state.stakingBalance}
                     />
         }
 
@@ -105,10 +105,6 @@ class App extends Component {
 
         console.log(account);
         console.log(networkId);
-        console.log(this.state.tetherBalance);
-        console.log(this.state.rwdBalance);
-        console.log(this.state.stakingBalance);
-
         this.setState({loading: false});
     }
 
