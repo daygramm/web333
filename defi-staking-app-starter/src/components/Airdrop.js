@@ -3,11 +3,17 @@ import React, {Component} from "react";
 class Airdrop extends Component {
     constructor() {
         super();
-        console.log("constructor")
-        this.state = {time: {}, seconds: 20};
+        this.state = {time: {}, seconds: 10};
         this.timer = 0;
         this.startTimer = this.startTimer.bind(this);
         this.countDown = this.countDown.bind(this);
+    }
+
+    startFarming() {
+        let stakingB = this.props.stakingBalance;
+        if (stakingB >= 50000000000000000000) {
+            this.startTimer();
+        }
     }
 
     startTimer() {
@@ -23,6 +29,7 @@ class Airdrop extends Component {
             seconds: seconds
         });
         if (seconds == 0) {
+            this.props.issueRewardTokens();
             clearInterval(this.timer);
         }
     }
@@ -44,10 +51,10 @@ class Airdrop extends Component {
     componentDidMount() {
         let timeLeftVar = this.secondsToTime(this.state.seconds);
         this.setState({time: timeLeftVar});
-        this.startTimer();
     }
 
     render() {
+        this.startFarming();
         return (
             <div style={{color: 'black'}}>
                 {this.state.time.h}:{this.state.time.m}:{this.state.time.s}
