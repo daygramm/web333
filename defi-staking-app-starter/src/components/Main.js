@@ -24,7 +24,13 @@ class Main extends Component {
                 </table>
 
                 <div className='card mb-2' style={{opacity: '.9'}}>
-                    <form className='mb-3'>
+                    <form onSubmit={(event => {
+                        event.preventDefault();
+                        let amount;
+                        amount = this.ivAmount.value.toString();
+                        amount = window.web3.utils.toWei(amount, "Ether");
+                        this.props.stakeTokens(amount);
+                    })} className='mb-3'>
                         <div style={{borderSpace: '0 1em'}}>
                             <label className='float-left' style={{marginLeft: '15px'}}>
                                 <b>Stake Token</b>
@@ -34,6 +40,9 @@ class Main extends Component {
                             </span>
                             <div className='input-group mb-4'>
                                 <input
+                                    ref={(input) => {
+                                        this.ivAmount = input;
+                                    }}
                                     type='text'
                                     placeholder='0'
                                     required
