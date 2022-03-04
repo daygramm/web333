@@ -1,0 +1,220 @@
+{
+  "contractName": "Ballot",
+  "abi": [],
+  "metadata": "{\"compiler\":{\"version\":\"0.5.17+commit.d19bba13\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"project:/src/contracts/Ballot.sol\":\"Ballot\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/src/contracts/Ballot.sol\":{\"keccak256\":\"0x87cac541293e2f493f90c303e6c5fe0aec383db8653431576558983f83fb17ed\",\"urls\":[\"bzz-raw://43c1963bf7200eac7651a0e7c9756f863f2202009725219a4b4df3b6f1acb502\",\"dweb:/ipfs/QmZK6GqHshpDsDo1hnvQyXzyjpcjFb5VAxuhriT3fpn5rE\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603e80601d6000396000f3fe6080604052600080fdfea265627a7a723158204b4d1a4e7ddff28c459418e2a22497bfebb91cff9b8dd080d871053bd46504cb64736f6c63430005110032",
+  "deployedBytecode": "0x6080604052600080fdfea265627a7a723158204b4d1a4e7ddff28c459418e2a22497bfebb91cff9b8dd080d871053bd46504cb64736f6c63430005110032",
+  "sourceMap": "61:63:0:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;61:63:0;;;;;;;",
+  "deployedSourceMap": "61:63:0:-;;;;;",
+  "source": "//pragma solidity >=0.7.0<0.9.0;\r\npragma solidity ^0.5.4;\r\n\r\ncontract Ballot {\r\n\r\n    string name;\r\n    uint voteCount;\r\n\r\n}",
+  "sourcePath": "D:\\Gitee\\defi-staking-app-starter\\defi-staking-app-starter\\src\\contracts\\Ballot.sol",
+  "ast": {
+    "absolutePath": "project:/src/contracts/Ballot.sol",
+    "exportedSymbols": {
+      "Ballot": [
+        6
+      ]
+    },
+    "id": 7,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1,
+        "literals": [
+          "solidity",
+          "^",
+          "0.5",
+          ".4"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "34:23:0"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 6,
+        "linearizedBaseContracts": [
+          6
+        ],
+        "name": "Ballot",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 3,
+            "name": "name",
+            "nodeType": "VariableDeclaration",
+            "scope": 6,
+            "src": "86:11:0",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_string_storage",
+              "typeString": "string"
+            },
+            "typeName": {
+              "id": 2,
+              "name": "string",
+              "nodeType": "ElementaryTypeName",
+              "src": "86:6:0",
+              "typeDescriptions": {
+                "typeIdentifier": "t_string_storage_ptr",
+                "typeString": "string"
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 5,
+            "name": "voteCount",
+            "nodeType": "VariableDeclaration",
+            "scope": 6,
+            "src": "104:14:0",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 4,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "104:4:0",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 7,
+        "src": "61:63:0"
+      }
+    ],
+    "src": "34:90:0"
+  },
+  "legacyAST": {
+    "attributes": {
+      "absolutePath": "project:/src/contracts/Ballot.sol",
+      "exportedSymbols": {
+        "Ballot": [
+          6
+        ]
+      }
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            "^",
+            "0.5",
+            ".4"
+          ]
+        },
+        "id": 1,
+        "name": "PragmaDirective",
+        "src": "34:23:0"
+      },
+      {
+        "attributes": {
+          "baseContracts": [
+            null
+          ],
+          "contractDependencies": [
+            null
+          ],
+          "contractKind": "contract",
+          "documentation": null,
+          "fullyImplemented": true,
+          "linearizedBaseContracts": [
+            6
+          ],
+          "name": "Ballot",
+          "scope": 7
+        },
+        "children": [
+          {
+            "attributes": {
+              "constant": false,
+              "name": "name",
+              "scope": 6,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "string",
+              "value": null,
+              "visibility": "internal"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "name": "string",
+                  "type": "string"
+                },
+                "id": 2,
+                "name": "ElementaryTypeName",
+                "src": "86:6:0"
+              }
+            ],
+            "id": 3,
+            "name": "VariableDeclaration",
+            "src": "86:11:0"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "name": "voteCount",
+              "scope": 6,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "uint256",
+              "value": null,
+              "visibility": "internal"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "name": "uint",
+                  "type": "uint256"
+                },
+                "id": 4,
+                "name": "ElementaryTypeName",
+                "src": "104:4:0"
+              }
+            ],
+            "id": 5,
+            "name": "VariableDeclaration",
+            "src": "104:14:0"
+          }
+        ],
+        "id": 6,
+        "name": "ContractDefinition",
+        "src": "61:63:0"
+      }
+    ],
+    "id": 7,
+    "name": "SourceUnit",
+    "src": "34:90:0"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.17+commit.d19bba13.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.5",
+  "updatedAt": "2022-03-04T01:43:21.588Z",
+  "devdoc": {
+    "methods": {}
+  },
+  "userdoc": {
+    "methods": {}
+  }
+}
