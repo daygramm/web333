@@ -1,4 +1,4 @@
-pragma solidity ^0.5.4;
+pragma solidity ^0.8;
 
 contract Tether {
     string public name = "Mock Tether Token";
