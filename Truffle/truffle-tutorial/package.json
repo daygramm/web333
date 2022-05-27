@@ -1,4 +1,14 @@
 {
+  "name": "truffle-tutorial",
+  "version": "1.0.0",
+  "description": "",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "truffle test"
+  },
   "dependencies": {
     "chai": "^4.3.6",
     "chai-as-promised": "^7.1.1"
