@@ -37,7 +37,7 @@ contract('TruffleTutorial', ([contractOwner, secondAddress, thirdAddress]) =>
 
     describe("message", () =>
     {
-        it("contract owner sets a message", async  =>
+        it("contract owner sets a message", async () =>
         {
             await truffleTutorial.setMessage("Hi there!", { from: contractOwner })
             const message = await truffleTutorial.message()
