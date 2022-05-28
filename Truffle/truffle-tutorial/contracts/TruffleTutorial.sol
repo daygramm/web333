@@ -1,10 +1,12 @@
-pragma solidity ^0.8.9;
+// SPDX-License-Identifier: GPL-3.0
+
+pragma solidity >=0.7.0 <0.9.0;
 
 contract TruffleTutorial {
     address public owner = msg.sender;
     string public message;
 
-    constructor() public {
+    constructor() {
         message = "Hello World!";
     }
 
