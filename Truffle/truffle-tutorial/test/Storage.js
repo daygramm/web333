@@ -1,18 +1,18 @@
 const { assert } = require("chai")
 
-const SimpleStorage = artifacts.require("./SimpleStorage.sol")
+const Storage = artifacts.require("./Storage.sol")
 
 require("chai")
     .use(require("chai-as-promised"))
     .should();
 
-contract('SimpleStorage', ([contractOwner, secondAddress, thirdAddress]) =>
+contract('Storage', ([contractOwner]) =>
 {
     let storage
 
     before(async () =>
     {
-        storage = await SimpleStorage.deployed()
+        storage = await Storage.deployed()
     })
 
     it("deploys successfully", async () =>
@@ -25,12 +25,20 @@ contract('SimpleStorage', ([contractOwner, secondAddress, thirdAddress]) =>
         assert.notEqual(address, 0x0)
     })
 
-    it("set", async () =>
+    it("set number", async () =>
     {
-        await storage.set(666)
-        const data = await storage.get()
+        await storage.setNumber(666)
+        const data = await storage.getNumber()
 
         assert.equal(data, 666)
+    })
+
+    it("add number", async () =>
+    {
+        await storage.addNumber()
+        const data = await storage.getNumber()
+
+        assert.equal(data, 667)
     })
 }
 )
