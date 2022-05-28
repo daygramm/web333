@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "b": "npx hardhat compile",
     "test": "npx hardhat test"
   },
   "keywords": [],
