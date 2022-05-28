@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: SEE LICENSE IN LICENSE
 pragma solidity >=0.7.0 <=0.9.0;
 
+import "hardhat/console.sol";
+
 contract Token {
     string public name = "ETATech";
     string public symbol = "ETA";
@@ -25,6 +27,9 @@ contract Token {
      * the contract.
      */
     function transfer(address to, uint256 amount) external {
+        console.log("\nSender balance is %s tokens", balances[msg.sender]);
+        console.log("Trying to send %s tokens to %s\n", amount, to);
+
         require(balances[msg.sender] >= amount, "Not enough tokens");
 
         balances[msg.sender] -= amount;
