@@ -22,5 +22,13 @@ module.exports = {
         solc: {
             version: "0.8.10"
         }
+    },
+    plugins: [
+        "truffle-plugin-verify"
+    ],
+    api_keys: {
+        // Your API key for Etherscan
+        // Obtain one at https://etherscan.io/
+        etherscan: "FRDHJP4ZBMH3X7R45XBAIWD23NPGQMD2TP"
     }
 };

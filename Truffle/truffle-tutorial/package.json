@@ -17,6 +17,7 @@
     "truffle-hdwallet-provider": "^1.0.17"
   },
   "devDependencies": {
-    "eslint": "^8.16.0"
+    "eslint": "^8.16.0",
+    "truffle-plugin-verify": "^0.5.26"
   }
 }
