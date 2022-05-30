@@ -17,4 +17,4 @@ contract = web3.eth.contract(address=address, abi=abi)
 
 num = contract.functions.getNumber().call()
 
-print("number:{} ", num)
+print("number:{} ".format(num))
