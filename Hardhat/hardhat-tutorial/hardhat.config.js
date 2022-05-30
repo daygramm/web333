@@ -1,18 +1,24 @@
 require("@nomiclabs/hardhat-waffle")
 
-const PRIVATE_KEY1 = "1505163bbfe508b34defe9d58fe58052bbb65ac507c6bd670b9643b3108ea983";
-const PRIVATE_KEY2 = "c967bf39e29b0946d66a167199e7732562231ebed8ef80fb952c84fd5736b632";
-const PRIVATE_KEY3 = "7b13607986c5501f2db23ad278d699c7f29b8b8e25e58c4729ed8d00bd572441";
+const GANACHE_PRIVATE_KEY1 = "b479759b7683d3cdca2b276674e1a52724351ae1e8eb0b9170b82c2f8e464121";
+const GANACHE_PRIVATE_KEY2 = "defb5e09db709f6afadcaa49127b36bbffa94343f4fd593c6f1c7b2e56d96ce9";
+const GANACHE_PRIVATE_KEY3 = "51d961b040fdfc86e1a6aa6d6c3d3e319e74d41a2993e180eb5fc84f112e3507";
+
+const RINKEBY_PRIVATE_KEY1 = "972ff45576a91a46b600be4b2ab7f41545858a1940fa2976172c168fe6d705ae";
 
 /**
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
-    solidity: "0.7.3",
+    solidity: "0.8.10",
     networks: {
         ganache: {
             url: `http://127.0.0.1:7545`,
-            accounts: [`0x${PRIVATE_KEY1}`, `0x${PRIVATE_KEY2}`, `0x${PRIVATE_KEY3}`]
+            accounts: [`0x${GANACHE_PRIVATE_KEY1}`, `0x${GANACHE_PRIVATE_KEY2}`, `0x${GANACHE_PRIVATE_KEY3}`]
+        },
+        rinkeby: {
+            url: `https://rinkeby.infura.io/v3/1649bfcc28344a1cb472a4b7640f72c0`,
+            accounts: [`0x${RINKEBY_PRIVATE_KEY1}`]
         }
     }
 };
