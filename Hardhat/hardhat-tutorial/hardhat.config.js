@@ -1,4 +1,5 @@
 require("@nomiclabs/hardhat-waffle")
+require("@nomiclabs/hardhat-etherscan");
 
 const GANACHE_PRIVATE_KEY1 = "b479759b7683d3cdca2b276674e1a52724351ae1e8eb0b9170b82c2f8e464121";
 const GANACHE_PRIVATE_KEY2 = "defb5e09db709f6afadcaa49127b36bbffa94343f4fd593c6f1c7b2e56d96ce9";
@@ -20,6 +21,11 @@ module.exports = {
             url: `https://rinkeby.infura.io/v3/1649bfcc28344a1cb472a4b7640f72c0`,
             accounts: [`0x${RINKEBY_PRIVATE_KEY1}`]
         }
+    },
+    etherscan: {
+        // Your API key for Etherscan
+        // Obtain one at https://etherscan.io/
+        apiKey: "FRDHJP4ZBMH3X7R45XBAIWD23NPGQMD2TP"
     }
 };
 
