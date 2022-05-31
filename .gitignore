@@ -1,3 +1,4 @@
 .idea/
 Hardhat/hardhat-tutorial/.env
 Web3py/.env
+Web3py/Tools/__pycache__
