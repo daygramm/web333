@@ -12,8 +12,8 @@ blockNumber = web3.eth.blockNumber
 print("Blcok Number: {}".format(blockNumber))
 
 block = web3.eth.getBlock(blockNumber)
-print(json.dumps(web3.toJSON(block), sort_keys=True, indent=4))
+print(web3.toJSON(block))
 
-hash = '0x298e673d583c943e498d886ab1d9189b4e4904f3d839b86b619d0877fb7e112e'
-transaction = web3.eth.getTransactionByBlock(hash,1)
-print(json.dumps(web3.toJSON(transaction), sort_keys=True, indent=4))
+hash = "0x298e673d583c943e498d886ab1d9189b4e4904f3d839b86b619d0877fb7e112e"
+transaction = web3.eth.getTransactionByBlock(hash, 1)
+print(web3.toJSON(transaction))
