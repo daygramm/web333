@@ -20,7 +20,7 @@ movies = [
 @app.route("/")
 @app.route("/index")
 @app.route("/home")
-def hello():
+def index():
     return render_template('index.html',name=name,movies=movies)
 
 
