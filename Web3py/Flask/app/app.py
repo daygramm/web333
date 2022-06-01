@@ -1,5 +1,5 @@
 from glob import escape
-from flask import Flask, url_for
+from flask import Flask, render_template, url_for
 
 app = Flask(__name__)
 
@@ -21,7 +21,7 @@ movies = [
 @app.route("/index")
 @app.route("/home")
 def hello():
-    return "Hello World!"
+    return render_template('index.html',name=name,movies=movies)
 
 
 @app.route("/flask")
