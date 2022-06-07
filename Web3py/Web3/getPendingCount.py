@@ -125,8 +125,9 @@ def get_pending_count():
 
 
 if __name__ == "__main__":
-    contracts = get_all_contracts()
-    # print(str(contracts))
+    # address = sys.argv[1]
+    address = "0x982a5a3F6ABFD179B3f7649af37942235a90935f"
+    contracts.append(address)
 
     # Flask
     app_run_thread = threading.Thread(target=app_run)
