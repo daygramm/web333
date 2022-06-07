@@ -19,10 +19,9 @@ db = pymysql.connect(
 #     host="172.21.157.7", user="magister_jvm", password="Mangosteen0!", database="metabus"
 # )
 cursor = db.cursor()
-
-web3_wss = Web3(
-    Web3.HTTPProvider("https://mainnet.infura.io/v3/23e4a77870ea4deab047bb6911a28144")
-)
+web3_url = "https://mainnet.infura.io/v3/23e4a77870ea4deab047bb6911a28144"
+web3_wss = Web3( Web3.HTTPProvider(web3_url))
+web3 = Web3(Web3.HTTPProvider(web3_url))
 
 app = Flask(__name__, instance_path="/{project_folder_abs_path}/instance")
 contracts = []
@@ -88,19 +87,18 @@ async def check_txs_status():
                 tx_hashs = redis.slave.lrange(contract_key, 0, -1)
                 for tx_hash in tx_hashs:
                     # 获取pending状态 result为空时pending
-                    etherscan_req = "https://api.etherscan.io/api?module=proxy&action=eth_getTransactionReceipt&txhash={}&apikey=FRDHJP4ZBMH3X7R45XBAIWD23NPGQMD2TP".format(
-                        tx_hash
-                    )
-                    tx_status = json.loads(requests.get(etherscan_req).text)
-                    if tx_status["result"] != None:  # result 不为空时脱离pending状态
+                    # etherscan_req = "https://api.etherscan.io/api?module=proxy&action=eth_getTransactionReceipt&txhash={}&apikey=FRDHJP4ZBMH3X7R45XBAIWD23NPGQMD2TP".format(
+                    #     tx_hash
+                    # )
+                    # tx_status = json.loads(requests.get(etherscan_req).text)
+                    print("\npending txs count: {} contract: {} txhash: {}".format(redis.slave.llen(contract_key), contract_key, tx_hash))
+                    try:
+                        web3.eth.getTransactionReceipt(tx_hash)
                         redis.master.lrem(contract_key, 1, tx_hash)
-                        # print("脱离pending状态: {}".format(tx_hash))
-
-                print(
-                    "\npending txs count: {} contract:{} ".format(
-                        redis.slave.llen(contract_key), contract_key
-                    )
-                )
+                        print("\npending txs remove count: {} contract:{} ".format(redis.slave.llen(contract_key), contract_key))
+                    except Exception as e:
+                        pass
+                
 
         except Exception as e:
             print(e)
@@ -126,7 +124,7 @@ def get_pending_count():
 
 if __name__ == "__main__":
     # address = sys.argv[1]
-    address = "0x982a5a3F6ABFD179B3f7649af37942235a90935f"
+    address = "0xaC9Bb427953aC7FDDC562ADcA86CF42D988047Fd"
     contracts.append(address)
 
     # Flask
@@ -135,6 +133,6 @@ if __name__ == "__main__":
 
     # pending
     loop = asyncio.get_event_loop()
-    tasks = [check_txs_status(), subscribe_pending(), update_contracts()]
+    tasks = [check_txs_status(), subscribe_pending()]
     loop.run_until_complete(asyncio.wait(tasks))
     loop.close()
