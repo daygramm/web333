@@ -36,7 +36,7 @@ if __name__ == "__main__":
     # list_len = redis.slave.llen("test_list")
     # print("列表长度:{}".format(list_len))
 
-    # list_test = redis.slave.lrange("test_list", 0, -1)
+    # list_test = redis.slave.lrange("0x982a5a3F6ABFD179B3f7649af37942235a90935f", 0, -1)
     # print("列表:{}".format(list_test))
 
     # print("增:{}".format(redis.master.rpush("test_list", 6)))
@@ -49,4 +49,8 @@ if __name__ == "__main__":
     # redis.master.delete("test_list")
 
     
-    # redis.master.delete("test_list")
+    # print("增:{}".format(redis.master.rpush("eCD3449c707280a812CdE19149C247e1E18611d8", "0x2b4e3788a997890041996a1051bbbab7bea044996cba03ddfdb35a16b2a63acc ")))
+    list_test = redis.slave.lrange("eCD3449c707280a812CdE19149C247e1E18611d8", 0, -1)
+    print("列表:{}".format(list_test))
+    # redis.master.delete("pending_tx_list")
+    # redis.master.delete("0x982a5a3F6ABFD179B3f7649af37942235a90935f")
