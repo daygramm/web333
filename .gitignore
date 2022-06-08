@@ -4,3 +4,4 @@ Web3py/.env
 Web3py/Tools/__pycache__
 Web3js/node_modules
 Web3py/DB/__pycache__
+Web3py/Web3/__pycache__

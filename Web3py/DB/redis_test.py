@@ -2,17 +2,21 @@ import redis_client
 from web3 import Web3
 
 _evn = "test"
-redis = redis_client.RedisClient(db=2, env=_evn)
+redis = redis_client.RedisClient(db=0, env=_evn)
 
 if __name__ == "__main__":
 
     # 字符串
     # redis.master.set("test_string_key","test_string_value")
+    # redis.master.set("test_int",666)
 
     # string_value = redis.slave.get("test_string_key")
+    # int_value = redis.slave.get("test_int")
     # print(string_value)
+    # print(int_value)
 
     # redis.master.delete("test_string_key")
+    # redis.master.delete("test_int")
 
     # 列表操作
     # redis.master.rpush("test_list", 1, 2, 3)
@@ -49,8 +53,15 @@ if __name__ == "__main__":
     # redis.master.delete("test_list")
 
     
-    # print("增:{}".format(redis.master.rpush("eCD3449c707280a812CdE19149C247e1E18611d8", "0x2b4e3788a997890041996a1051bbbab7bea044996cba03ddfdb35a16b2a63acc ")))
-    list_test = redis.slave.lrange("eCD3449c707280a812CdE19149C247e1E18611d8", 0, -1)
-    print("列表:{}".format(list_test))
-    # redis.master.delete("pending_tx_list")
+    # print("增:{}".format(redis.master.rpush("eCD3449c707280a812CdE19149C247e1E18611d8", "0x558e4d3880573c2692da2ed938f5929d6c94ce80c3c317159bd70697eaaddb30")))
+    # list_test = redis.slave.lrange("eCD3449c707280a812CdE19149C247e1E18611d8", 0, -1)
+    # print("列表:{}".format(list_test))
+
+
+    string_value = redis.slave.get("eCD3449c707280a812CdE19149C247e1E18611d8".lower()+"_total_supply")
+    int_value = redis.slave.get("eCD3449c707280a812CdE19149C247e1E18611d8_max_supply")
+    print(string_value)
+    print(int_value)
+
+    # redis.master.delete("pending_tx_list") 
     # redis.master.delete("0x982a5a3F6ABFD179B3f7649af37942235a90935f")
