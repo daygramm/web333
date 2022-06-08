@@ -3,16 +3,14 @@ import threading
 
 
 async def hello1():
-    print("1Hello world! (%s)" % threading.currentThread())
-    await asyncio.sleep(1)
-    print("1Hello again! (%s)" % threading.currentThread())
-
+    while True:
+        print("hello1 (%s) *************************************" % threading.currentThread())   
+        await asyncio.sleep(3)
 
 async def hello2():
-    print("2Hello world! (%s)" % threading.currentThread())
-    await asyncio.sleep(1)
-    print("2Hello again! (%s)" % threading.currentThread())
-
+    while True:
+        print("hello2 (%s)" % threading.currentThread())
+        await asyncio.sleep(1)
 
 loop = asyncio.get_event_loop()
 tasks = [hello1(), hello2()]
