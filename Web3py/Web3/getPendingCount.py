@@ -8,16 +8,22 @@ from web3 import Web3
 
 import redis_client
 import requests
+from Logger import Logger
 
-_evn = "test"
+logger = Logger('******pending_count******')
+_evn = "prod"
 redis = redis_client.RedisClient(db=0, env=_evn)
 
-db = pymysql.connect(
-    host="47.114.151.253", user="admin", password="Mangosteen0!", database="metabus"
-)
+redis_prefix = "metabus:pending_count:"
+redis_prefix_list = redis_prefix + "pending:" 
+redis_prefix_total_supply = redis_prefix + "supply:total:" 
+redis_prefix_max_supply = redis_prefix + "supply:max:" 
 # db = pymysql.connect(
-#     host="172.21.157.7", user="magister_jvm", password="Mangosteen0!", database="metabus"
+#     host="47.114.151.253", user="admin", password="Mangosteen0!", database="metabus"
 # )
+db = pymysql.connect(
+    host="172.21.157.7", user="magister_jvm", password="Mangosteen0!", database="metabus"
+)
 cursor = db.cursor()
 web3_url = "https://mainnet.infura.io/v3/23e4a77870ea4deab047bb6911a28144"
 web3_wss = Web3( Web3.HTTPProvider(web3_url))
@@ -27,7 +33,7 @@ erc721_abi = json.loads(
 )
 
 app = Flask(__name__, instance_path="/{project_folder_abs_path}/instance")
-contracts = []
+contracts = {}
 
 # 获取所有要查询pending的合约地址
 def get_all_contracts():
@@ -35,9 +41,12 @@ def get_all_contracts():
     cursor.execute(sql)
 
     results = cursor.fetchall()
-    contracts = []
+    contracts = {}
     for row in results:
-        contracts.append(row[2])
+        key = "0x" + str(row[2]).lower()
+        contracts[key] = 1
+    
+    logger.log_info("get all contracts")
     return contracts
 
 
@@ -51,54 +60,21 @@ def send_dingtalk(text):
             "text": text
         }
     }
-    print(requests.post(url, headers=headers, data=json.dumps(data)))
+    logger.log_info(requests.post(url, headers=headers, data=json.dumps(data)))
 
-def get_supply(contracts):
-    i = 0
-    l = len(contracts)
-    logT = []
-    logS = []
-    for c in contracts:
-        address = Web3.toChecksumAddress(c)
-        contract = web3.eth.contract(address=address, abi=erc721_abi)
-        
-        try:                    
-            totalSupply = contract.functions.totalSupply().call()
-            key = str(c).lower()+'_total_supply'
-            redis.master.set(key, totalSupply)
-            print("{}/{}.totalSupply: {}".format(i,l,redis.slave.get(key)))
-        except Exception as e:
-            # print("合约: {} 找不到 totolSupply 对应的函数, Exception: {}".format(c,e))
-            logT.append("- 合约: {} 找不到 totolSupply 对应的函数, Exception: {}\n".format(c,e))
-
-        try:
-            maxSupply = contract.functions.maxSupply().call()
-            key = str(c).lower()+'_max_supply'
-            redis.master.set(key, maxSupply)
-            print("{}/{}.maxSupply: {}".format(i,l,redis.slave.get(key)))
-        except Exception as e:
-            # print("合约: {} 找不到 maxSupply 对应的函数, Exception: {}".format(c,e))
-            logS.append("- 合约: {} 找不到 maxSupply 对应的函数, Exception: {}\n".format(c,e))
-
-        i = i + 1
-    msgT = "### totalSupply:\n{}".format(''.join(logT)) 
-    msgS = "### maxSupply:\n{}".format(''.join(logS))
-    print(msgT)
-    print(msgS)
-    # send_dingtalk(msgT + "\n" + msgS)
 
 # 每小时更新一次合约地址
 async def update_contracts():
     global contracts
     while True:
         contracts = get_all_contracts()
-        # print("update contract: {}".format(str(contracts)))
-        get_supply(contracts)
-        await asyncio.sleep(3600)
+        logger.log_info("update contracts from mysql, current contract count: {}".format(len(contracts)))
+        await asyncio.sleep(3)
 
 
 # 订阅所有pending交易
 async def subscribe_pending():
+    logger.log_info("开始连接订阅 Bloxroute ...")
     async with WsProvider(
         uri="wss://api.blxrbdn.com/ws",
         headers={
@@ -108,23 +84,26 @@ async def subscribe_pending():
         subscription_id = await ws.subscribe(
             "pendingTxs",
             {
-                "include": ["tx_hash", "tx_contents"],
-                "filters": "to in " + str(contracts),
-            },
+                "include": ["tx_hash", "tx_contents"]
+            }
         )
-
+        logger.log_info("连接成功! Bloxroute ...")
         while True:
             try:
                 next_notification = await ws.get_next_subscription_notification_by_id(
                     subscription_id
                 )
-                txHash = next_notification.notification["txHash"]
                 contract = next_notification.notification["txContents"]["to"]
-                redis.master.rpush(str(contract).lower(), txHash)
-                print("new pending for contract:{} txhash:{}".format(contract, txHash))
+                key = str(contract).lower()
+                if key not in contracts:
+                    # logger.log_info("to hash {} 不在观察列表中, 当前列表长度:{}".format(str(contract).lower(), len(contracts)))
+                    continue
+                txHash = next_notification.notification["txHash"]
+                redis.master.rpush(redis_prefix_list + str(contract).lower(), txHash)
+                logger.log_info("new pending for contract:{} txhash:{}".format(contract, txHash))
                 pass
             except Exception as e:
-                print(e)
+                logger.log_info(e)
         await ws.unsubscribe(subscription_id)
 
 
@@ -132,26 +111,23 @@ async def subscribe_pending():
 async def check_txs_status():
     while True:
         try:
-            for contract in contracts:
-                contract_key = str(contract).lower()
+            for contract in contracts.keys():
+                contract_key = redis_prefix_list + str(contract).lower()
                 tx_hashs = redis.slave.lrange(contract_key, 0, -1)
                 for tx_hash in tx_hashs:
                     # 获取pending状态 result为空时pending
-                    # etherscan_req = "https://api.etherscan.io/api?module=proxy&action=eth_getTransactionReceipt&txhash={}&apikey=FRDHJP4ZBMH3X7R45XBAIWD23NPGQMD2TP".format(
-                    #     tx_hash
-                    # )
-                    # tx_status = json.loads(requests.get(etherscan_req).text)
-                    print("\npending txs count: {} contract: {} txhash: {}".format(redis.slave.llen(contract_key), contract_key, tx_hash))
                     try:
-                        web3.eth.getTransactionReceipt(tx_hash)
-                        redis.master.lrem(contract_key, 1, tx_hash)
-                        print("\npending txs remove count: {} contract:{} ".format(redis.slave.llen(contract_key), contract_key))
+                        receipt = web3.eth.getTransactionReceipt(tx_hash) # 参考: https://web3js.readthedocs.io/en/v1.2.11/web3-eth.html#gettransactionreceipt
+                        if receipt:
+                            redis.master.lrem(contract_key, 1, tx_hash)
+                            logger.log_info("\npending txs remove count: {} contract: {} txHash: {} receipt: {}".format(redis.slave.llen(contract_key), contract_key, tx_hash, "receipt"))
+                        else:
+                            logger.log_info("receipt is null, still pending.")
                     except Exception as e:
                         pass
                 
-            # get_supply(contracts)
         except Exception as e:
-            print(e)
+            logger.log_info(e)
         await asyncio.sleep(3)
 
 
@@ -163,7 +139,11 @@ def app_run():
 def get_pending_count():
     try:
         contract = request.args.get("contract")
-        pending_count = redis.slave.llen(contract)
+        tx_hashs = redis.slave.lrange(redis_prefix_list + str(contract).lower(), 0, -1)
+        
+        ls = list(set(tx_hashs))
+        pending_count = len(ls)
+
         return (
             jsonify({"msg": "success", "data": {"pending_count": pending_count}}),
             200,
@@ -173,9 +153,8 @@ def get_pending_count():
 
 
 if __name__ == "__main__":
-    # address = sys.argv[1]
-    address = "0xaC9Bb427953aC7FDDC562ADcA86CF42D988047Fd"
-    contracts.append(address)
+    logger.log_info("************************************************ start counting *****************************************************************")
+    # contracts["0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D".lower()] = 1 # 测试
 
     # Flask
     app_run_thread = threading.Thread(target=app_run)
