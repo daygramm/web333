@@ -10,16 +10,15 @@ db = pymysql.connect(
 )
 cursor = db.cursor()  
 
-# insert 
+# delete
 sql = """
-	INSERT INTO productnotes(prod_id, note_date, note_text) 
-	VALUES(%s,%s,%s)
+	DELETE FROM `productnotes` 
+    WHERE prod_id='Test'
 	"""
-values = ("Test", datetime.datetime.now(), "Test Note")
 try:
-    cursor.execute(sql, values)
+    cursor.execute(sql)
     db.commit()  # 提交到数据库执行，一定要记提交哦
-    print("insert success")
+    print("delete success")
 except Exception as e:
     db.rollback()  # 发生错误时回滚
     print(e)

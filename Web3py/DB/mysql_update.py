@@ -10,16 +10,17 @@ db = pymysql.connect(
 )
 cursor = db.cursor()  
 
-# insert 
+# update 
 sql = """
-	INSERT INTO productnotes(prod_id, note_date, note_text) 
-	VALUES(%s,%s,%s)
+	UPDATE productnotes 
+    SET note_text='Update Note',
+        note_date=%s
+    WHERE prod_id='Test'
 	"""
-values = ("Test", datetime.datetime.now(), "Test Note")
 try:
-    cursor.execute(sql, values)
+    cursor.execute(sql,datetime.datetime.now())
     db.commit()  # 提交到数据库执行，一定要记提交哦
-    print("insert success")
+    print("update success")
 except Exception as e:
     db.rollback()  # 发生错误时回滚
     print(e)
