@@ -1,20 +1,22 @@
 import pymysql
 
-# 打开数据库连接
+# 初始化数据库连接, 获取cursor
 db = pymysql.connect(
-    host="192.168.1.172",
-    user="root",
-    password="love1115",
-    database="mysql"
+	host="192.168.1.172",
+	user="gaojian",
+	password="password",
+	database="mysql_crash_course"
 )
+cursor = db.cursor()  
 
-# 使用cursor()方法获取操作游标
-cursor = db.cursor()
-
-# 创建数据表SQL语句
-sql = """SELECT * FROM user"""
+# 查询数据库
+sql = """SELECT order_num,cust_id FROM orders"""
 cursor.execute(sql)
 
 results = cursor.fetchall()
 for row in results:
-    print("name: {} \t\t\tminter_contract: {}".format(row[1], row[2]))
+	print(f"name: {row[0]} \t\t\t minter_contract: {row[1]}")
+
+# 释放数据库连接
+cursor.close()
+db.close()
